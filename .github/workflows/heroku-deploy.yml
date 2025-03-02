@@ -1,45 +1,48 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-# This workflow will build a package using Gradle and then publish it to GitHub packages when a release is created
-# For more information see: https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#Publishing-using-gradle
-
-name: Gradle Package
+name: Heroku Deployment
 
 on:
-  release:
-    types: [created]
+  push:
+    branches: [ "live" ]
+  pull_request:
+    branches: [ "live" ]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
-        settings-path: ${{ github.workspace }} # location for the settings.xml file
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+      # Java 17 kurulumu
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'  # Gradle kullanıyorsan önbellekleme sağlar
 
-    - name: Build with Gradle
-      run: ./gradlew build
+      # Heroku için Java 17 ayarları (system.properties)
+      - name: Set Java 17 for Heroku
+        run: echo "java.runtime.version=17" > system.properties
 
-    - name: Deploy to Heroku
-      uses: AkhileshNS/heroku-deploy@v3.14.15
-      with:
+      # Gradle ile Projeyi Build Etme (bootJar kullanarak)
+      - name: Build with Gradle
+        run: ./gradlew clean bootJar
+
+      # Procfile oluştur (Heroku'nun doğru JAR dosyasını çalıştırması için)
+      - name: Create Procfile
+        run: |
+          echo "web: java -Dserver.port=\$PORT -jar build/libs/ilican-special-education-0.0.1-SNAPSHOT.jar" > Procfile
+      # Heroku CLI kurulumu
+      - name: Install Heroku CLI
+        run: |
+          curl https://cli-assets.heroku.com/install.sh | sh
+
+      # Heroku'ya deploy işlemi
+      - name: Deploy to Heroku
+        uses: AkhileshNS/heroku-deploy@v3.14.15
+        with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_email: ${{ secrets.HEROKU_EMAIL }}
           heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
-          branch: live
-
