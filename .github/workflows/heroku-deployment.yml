@@ -2,9 +2,9 @@ name: Heroku Deployment
 
 on:
   push:
-    branches: [ "live" ]
+    branches: [ "development" ]
   pull_request:
-    branches: [ "live" ]
+    branches: [ "development" ]
 
 jobs:
   build:
