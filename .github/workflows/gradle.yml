@@ -9,9 +9,9 @@ name: IlicanSpecialEducation Flow
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "live" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "live" ]
 
 jobs:
   build:
