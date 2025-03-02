@@ -26,14 +26,6 @@ jobs:
       - name: Set Java 17 for Heroku
         run: echo "java.runtime.version=17" > system.properties
 
-      # Gradle ile Projeyi Build Etme (bootJar kullanarak)
-      - name: Build with Gradle
-        run: ./gradlew clean bootJar
-
-      # Procfile oluştur (Heroku'nun doğru JAR dosyasını çalıştırması için)
-      - name: Create Procfile
-        run: |
-          echo "web: java -Dserver.port=\$PORT -jar build/libs/ilican-special-education-0.0.1-SNAPSHOT.jar" > Procfile
       # Heroku CLI kurulumu
       - name: Install Heroku CLI
         run: |

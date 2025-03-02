@@ -19,11 +19,6 @@ configurations {
     }
 }
 
-jar {
-    manifest {
-        attributes 'Main-Class': 'com.ilicanspecialeducation.IlicanSpecialEducationMsApplication'
-    }
-}
 
 repositories {
     mavenCentral()
@@ -53,10 +48,4 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
-}
-
-tasks.named('bootJar') {
-    manifest {
-        attributes 'Main-Class': 'com.ilicanspecialeducation.IlicanSpecialEducationMsApplication'
-    }
 }
