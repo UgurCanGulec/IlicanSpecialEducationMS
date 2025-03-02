@@ -18,7 +18,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/employee")
-@CrossOrigin(origins = "http://localhost:3000")
 public class EmployeeController {
 
     private final EmployeeFacade employeeFacade;
