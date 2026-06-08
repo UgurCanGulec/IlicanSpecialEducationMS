@@ -60,4 +60,11 @@ public class PostAdapter implements PostPort {
                 .orElseThrow(() -> new PostNotFoundException(POST_NOT_FOUND));
         postRepository.delete(entity);
     }
+
+    @Override
+    public PostDTO getPostById(Long id) {
+        Post entity = postRepository.findById(id)
+                .orElseThrow(() -> new PostNotFoundException(POST_NOT_FOUND));
+        return postMapper.mapEntity2DTO(entity);
+    }
 }

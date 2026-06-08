@@ -29,7 +29,7 @@ public class EmployeeController {
 
     @Autowired
     public EmployeeController(EmployeePort employeePort, ImageStoragePort imageStoragePort) {
-        this.employeeFacade = new EmployeeFacadeImpl(employeePort);
+        this.employeeFacade = new EmployeeFacadeImpl(employeePort, imageStoragePort);
         this.imageStorageFacade = new ImageStorageFacadeImpl(imageStoragePort);
     }
 

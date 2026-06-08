@@ -40,6 +40,14 @@ public class EmployeeAdapter implements EmployeePort {
     }
 
     @Override
+    public EmployeeDTO getEmployeeById(Long id) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new EmployeeNotFoundException(ExceptionMessage.EMPLOYEE_NOT_FOUND));
+        return employeeMapper.mapEntity2DTO(employee);
+    }
+
+
+    @Override
     public void removeEmployeeById(Long id) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new EmployeeNotFoundException(ExceptionMessage.EMPLOYEE_NOT_FOUND));
