@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Exception;
 
@@ -53,6 +54,26 @@ public class ImageStorageAdapter implements ImageStoragePort {
             throw new RuntimeException("Depolama servisi hatası (" + errorCode + "): " + e.awsErrorDetails().errorMessage());
         } catch (IOException e) {
             throw new RuntimeException("Dosya okunurken bir hata oluştu: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void deleteImage(String pictureUrl) {
+        if (pictureUrl == null || !pictureUrl.contains("/" + bucketName + "/")) {
+            return;
+        }
+        try {
+            String searchPattern = "/" + bucketName + "/";
+            String uniqueFileName = pictureUrl.substring(pictureUrl.indexOf(searchPattern) + searchPattern.length());
+            DeleteObjectRequest deleteObjectRequest = DeleteObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(uniqueFileName)
+                    .build();
+            s3Client.deleteObject(deleteObjectRequest);
+        } catch (S3Exception e) {
+            System.err.println("Supabase S3 dosya silme hatası (" + e.awsErrorDetails().errorCode() + "): " + e.awsErrorDetails().errorMessage());
+        } catch (Exception e) {
+            System.err.println("Görsel silinirken beklenmeyen bir hata oluştu: " + e.getMessage());
         }
     }
 }

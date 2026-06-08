@@ -10,6 +10,8 @@ public interface EmployeePort {
 
     void saveEmployee(EmployeeDTO employee);
 
+    EmployeeDTO getEmployeeById(Long id);
+
     void removeEmployeeById(Long id);
 
     void updateEmployee(EmployeeDTO employee);

@@ -12,4 +12,6 @@ public interface PostPort {
     void updatePost(PostDTO post);
 
     void deletePost(Long id);
+
+    PostDTO getPostById(Long id);
 }

@@ -29,7 +29,7 @@ public class PostController {
 
     @Autowired
     public PostController(PostPort postPort, ImageStoragePort imageStoragePort) {
-        this.postFacade = new PostFacadeImpl(postPort);
+        this.postFacade = new PostFacadeImpl(postPort, imageStoragePort);
         this.imageStorageFacade = new ImageStorageFacadeImpl(imageStoragePort);
     }
 
